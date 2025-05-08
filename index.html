@@ -98,13 +98,18 @@
     <script>
         // Parse URL parameters
         const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('id');
+        const id = urlParams.get('id');
         const type = urlParams.get('type');
+        const albumId = urlParams.get('albumId');
+        const userId = urlParams.get('userId');
         
         // Set up direct URL scheme
         let directUrl;
-        if (userId && type === 'user') {
-            directUrl = `melodo://user/${userId}`;
+        if (type === 'user' && id) {
+            directUrl = `melodo://user/${id}`;
+        } else if (type === 'review' && id) {
+            // Review deeplink includes reviewId, albumId, and userId parameters
+            directUrl = `melodo://review/${id}?albumId=${albumId || ''}&userId=${userId || ''}`;
         } else {
             directUrl = 'melodo://';
         }
@@ -151,7 +156,7 @@
             gtag('event', 'deep_link_opened', {
                 'event_category': 'Engagement',
                 'event_label': 'Deep Link',
-                'user_id': userId || 'none',
+                'id': id || 'none',
                 'type': type || 'none'
             });
         }
