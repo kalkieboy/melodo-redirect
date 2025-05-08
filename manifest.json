@@ -1,0 +1,46 @@
+{
+  "name": "Melodo",
+  "short_name": "Melodo",
+  "description": "Share and discover music profiles with Melodo",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0E0D09",
+  "theme_color": "#D4A85A",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "play",
+      "id": "com.yourdomain.Melodo",
+      "url": "https://play.google.com/store/apps/details?id=com.yourdomain.Melodo"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://apps.apple.com/app/id6744846435"
+    }
+  ],
+  "prefer_related_applications": true,
+  "orientation": "portrait",
+  "scope": "/",
+  "categories": ["music", "social", "entertainment"],
+  "shortcuts": [
+    {
+      "name": "Open Profile",
+      "short_name": "Profile",
+      "description": "Open your Melodo profile",
+      "url": "/?action=profile"
+    }
+  ]
+}
