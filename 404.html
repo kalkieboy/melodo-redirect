@@ -1,0 +1,36 @@
+<script>
+    // Parse URL path
+    const path = window.location.pathname;
+    
+    // Set up direct URL scheme
+    let directUrl;
+    
+    // Handle user profile links: /u/userId
+    const userMatch = path.match(/^\/u\/([^\/]+)/);
+    if (userMatch && userMatch[1]) {
+        directUrl = `melodo://user/${userMatch[1]}`;
+    } 
+    // Handle review links: /r/reviewId
+    else if (reviewMatch = path.match(/^\/r\/([^\/]+)/)) {
+        directUrl = `melodo://review/${reviewMatch[1]}`;
+        
+        // Add query params if needed from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const albumId = urlParams.get('a');
+        const userId = urlParams.get('u');
+        
+        if (albumId || userId) {
+            directUrl += '?';
+            if (albumId) directUrl += `albumId=${albumId}`;
+            if (albumId && userId) directUrl += '&';
+            if (userId) directUrl += `userId=${userId}`;
+        }
+    } 
+    // Default case
+    else {
+        directUrl = 'melodo://';
+    }
+    
+    // Rest of your redirect logic remains the same
+    // ...
+</script>
