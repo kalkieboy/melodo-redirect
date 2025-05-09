@@ -85,7 +85,7 @@
 </head>
 <body>
     <!-- Replace with your actual logo -->
-    <img src="/logo.png" alt="Melodo Logo" class="logo">
+    <img src="logo.png" alt="Melodo Logo" class="logo">
     <h1>Opening Melodo</h1>
     <p>We're trying to open the Melodo app. If nothing happens, use one of the options below.</p>
     <div class="loading" id="loading"></div>
@@ -140,6 +140,22 @@
                 if (albumId && userId) directUrl += '&';
                 if (userId) directUrl += `userId=${userId}`;
             }
+        }
+        // Check for collection path: /c/collectionId
+        else if (collectionMatch = path.match(/^\/c\/([^\/]+)/)) {
+            // Get the collection ID from the path
+            const collectionId = collectionMatch[1];
+            
+            // Build the deeplink URL for collections
+            directUrl = `melodo://collection/${collectionId}`;
+        }
+        // Check for vinyl collection path: /v/userId
+        else if (vinylMatch = path.match(/^\/v\/([^\/]+)/)) {
+            // Get the user ID from the path
+            const userId = vinylMatch[1];
+            
+            // Build the deeplink URL for vinyl collections
+            directUrl = `melodo://vinyl/${userId}`;
         }
         // Default case for homepage or unrecognized paths
         else {
