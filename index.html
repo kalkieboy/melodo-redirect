@@ -1,9 +1,455 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta http-equiv="refresh" content="0; url=https://melodoapp.com/404.html">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melodo - Discover, Review, and Share Your World of Music</title>
+    <meta name="description" content="Melodo is your ultimate companion for music discovery. Catalog your vinyl, review albums, share your daily soundtrack, and connect with fellow music lovers.">
+    
+    <!-- Favicons and Manifest -->
+    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons (Example) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* --- Global Styles & Colors --- */
+        :root {
+            --primary-color: #D4A85A;
+            --primary-light: #E3C386;
+            --primary-dark: #B38940;
+            --background-color: #0E0D09;
+            --card-bg-color: #161412;
+            --elevated-color: #1E1B17;
+            --text-primary-color: #F0E6D6;
+            --text-secondary-color: #9D9283;
+            --text-tertiary-color: #6D6356;
+            --accent-color: #B85F38; /* From HomeScreen.js */
+            --font-heading: 'Roboto Mono', monospace;
+            --font-body: 'Lato', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-body);
+            background-color: var(--background-color);
+            color: var(--text-primary-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-heading);
+            color: var(--primary-color);
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+        
+        h1 { font-size: 2.8rem; margin-bottom: 0.5em;}
+        h2 { font-size: 2.2rem; margin-bottom: 1em; text-align: center; }
+        h3 { font-size: 1.5rem; color: var(--primary-light); margin-bottom: 0.5em; }
+
+        p {
+            color: var(--text-secondary-color);
+            font-size: 1.1rem;
+            margin-bottom: 1em;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        a:hover {
+            color: var(--primary-light);
+            text-decoration: underline;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            font-family: var(--font-heading);
+            font-weight: bold;
+            border-radius: 8px;
+            text-align: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: 2px solid var(--primary-color);
+            font-size: 1rem;
+            margin: 5px;
+        }
+        .btn:hover {
+            background-color: var(--primary-dark);
+            color: var(--background-color);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: var(--background-color);
+        }
+
+        /* --- Header / Navbar --- */
+        header {
+            background-color: var(--elevated-color);
+            padding: 15px 0;
+            border-bottom: 1px solid var(--text-tertiary-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo img {
+            height: 40px; /* Adjust as needed */
+        }
+        nav a {
+            margin-left: 20px;
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+        }
+        .app-store-badges-nav img {
+            height: 35px;
+            margin-left: 10px;
+        }
+
+
+        /* --- Hero Section --- */
+        .hero {
+            background: linear-gradient(rgba(14, 13, 9, 0.8), rgba(14, 13, 9, 0.9)), url('YOUR_APP_BACKGROUND_IMAGE.jpg') no-repeat center center/cover; /* Replace with a cool background image */
+            /* Fallback background if image is not set */
+            background-color: var(--card-bg-color);
+            padding: 80px 0;
+            text-align: center;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            color: var(--text-primary-color);
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+        }
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 20px auto 30px;
+            color: var(--text-secondary-color);
+        }
+        .hero .app-mockup {
+            margin-top: 40px;
+            max-width: 80%; /* Adjust as needed */
+            /* Placeholder styling for mockup */
+            background: var(--elevated-color);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .hero .app-mockup img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .app-store-badges img {
+            height: 50px; /* Adjust size as needed */
+            margin: 0 10px;
+            transition: transform 0.2s ease;
+        }
+        .app-store-badges img:hover {
+            transform: scale(1.05);
+        }
+
+        /* --- Features Section --- */
+        .features {
+            padding: 60px 0;
+            background-color: var(--background-color);
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        .feature-item {
+            background-color: var(--card-bg-color);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--text-tertiary-color);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(212, 168, 90, 0.1);
+        }
+        .feature-item i { /* Font Awesome icon style */
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        .feature-item h3 {
+            margin-top: 0;
+        }
+
+        /* --- Showcase Section --- */
+        .showcase-section {
+            padding: 60px 0;
+            background-color: var(--elevated-color);
+            text-align: center;
+        }
+        .showcase-section .app-mockup {
+            /* Placeholder styling for mockup */
+            background: var(--card-bg-color);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 700px;
+            margin: 30px auto;
+        }
+         .showcase-section .app-mockup img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        /* --- CTA Section --- */
+        .cta-section {
+            padding: 80px 0;
+            background-color: var(--card-bg-color); /* Or primary color for strong CTA */
+            text-align: center;
+        }
+        .cta-section h2 {
+            color: var(--primary-light);
+        }
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--elevated-color);
+            color: var(--text-secondary-color);
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid var(--text-tertiary-color);
+            font-size: 0.9rem;
+        }
+        footer p {
+            margin: 5px 0;
+            color: var(--text-tertiary-color);
+        }
+        footer a {
+            color: var(--text-secondary-color);
+        }
+        footer a:hover {
+            color: var(--primary-light);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+            header .container { flex-direction: column; }
+            nav { margin-top: 10px; }
+            nav a { margin: 0 10px; }
+            .app-store-badges-nav { margin-top:10px; }
+        }
+
+    </style>
 </head>
 <body>
-    Redirecting...
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <a href="#" class="logo"><img src="logo.png" alt="Melodo Logo"></a>
+            <nav>
+                <a href="#features">Features</a>
+                <a href="#showcase">Showcase</a>
+                <!-- <a href="#">Blog</a> -->
+                <span class="app-store-badges-nav">
+                    <a href="https://apps.apple.com/app/id6744846435" target="_blank" aria-label="Download on the App Store">
+                        <img src="https://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg" alt="App Store Badge">
+                    </a>
+                    <a href="https://play.google.com/store/apps/details?id=com.yourdomain.Melodo" target="_blank" aria-label="Get it on Google Play">
+                        <!-- Find a Google Play badge SVG or use a text link -->
+                        <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Google Play Badge" style="height: 52px; margin-top: -8px;">
+                    </a>
+                </span>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Your Universe of Music. Curated by You.</h1>
+            <p>Melodo is where your music journey takes center stage. Discover new sounds, chronicle your vinyl treasures, pen insightful reviews, and share your signature soundtrack with a vibrant community of audiophiles.</p>
+            <div class="app-store-badges">
+                <a href="https://apps.apple.com/app/id6744846435" target="_blank" aria-label="Download on the App Store">
+                    <img src="https://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg" alt="Download on the App Store">
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=com.yourdomain.Melodo" target="_blank" aria-label="Get it on Google Play">
+                    <!-- IMPORTANT: Replace com.yourdomain.Melodo with your actual Google Play ID -->
+                    <!-- You can find official Google Play badges here: https://play.google.com/intl/en_us/badges/ -->
+                    <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play">
+                </a>
+            </div>
+            <div class="app-mockup">
+                <!-- Ideally, replace this with an actual screenshot or mockup of your app -->
+                <img src="YOUR_APP_MOCKUP_HERO.png" alt="Melodo App Interface Mockup">
+                <p style="font-size:0.9em; margin-top:10px;">(App mockup placeholder - replace with your image)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Experience Melodo</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-compact-disc"></i>
+                    <h3>Catalog Your Vinyl</h3>
+                    <p>Digitize your physical collection. Add details, pressing info, and personal notes to your prized records.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-star"></i>
+                    <h3>Review & Rate</h3>
+                    <p>Share your thoughts on albums. Write detailed reviews, assign ratings, and contribute to a passionate music community.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-music"></i>
+                    <h3>Daily Soundtrack</h3>
+                    <p>What's your vibe today? Pick and share your daily song, and see what your friends are listening to.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-record-vinyl"></i> <!-- Or fas fa-layer-group -->
+                    <h3>Curate Showcases</h3>
+                    <p>Create themed collections of albums – your all-time favorites, desert island discs, or genre explorations.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-headphones-alt"></i>
+                    <h3>Personalized Discovery</h3>
+                    <p>Unearth new gems with recommendations tailored to your listening history and unique taste profile.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-users"></i>
+                    <h3>Connect With Friends</h3>
+                    <p>Follow fellow music enthusiasts, discover what they're rating, and share your musical journey together.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Showcase Section -->
+    <section id="showcase" class="showcase-section">
+        <div class="container">
+            <h2>Styled for Audiophiles</h2>
+            <p>Immerse yourself in a beautifully designed interface that celebrates music culture.</p>
+            <div class="app-mockup">
+                 <!-- Ideally, replace this with another actual screenshot or mockup of your app -->
+                <img src="YOUR_APP_MOCKUP_SHOWCASE.png" alt="Melodo App Feature Showcase">
+                <p style="font-size:0.9em; margin-top:10px;">(App mockup placeholder - replace with your image)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Tune In?</h2>
+            <p>Download Melodo today and start building your musical legacy. Your next favorite album awaits.</p>
+            <div class="app-store-badges">
+                <a href="https://apps.apple.com/app/id6744846435" target="_blank" aria-label="Download on the App Store">
+                    <img src="https://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg" alt="Download on the App Store">
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=com.yourdomain.Melodo" target="_blank" aria-label="Get it on Google Play">
+                    <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play">
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© <span id="currentYear"></span> Melodo. All rights reserved.</p>
+            <p>
+                <a href="privacy.html">Privacy Policy</a>
+                <!-- Add other links if needed, e.g., Terms of Service, Contact -->
+            </p>
+             <p style="font-size: 0.8em; color: var(--text-tertiary-color);">Designed with passion for music.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // --- Legacy Deep Link Handling (for ?id=...&type=... links) ---
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            const type = params.get('type'); // e.g., 'user', 'review'
+
+            if (id && type) {
+                // App's URL scheme
+                // Make sure this matches your app's actual scheme
+                const appURL = `melodo://${type}/${id}`; 
+                
+                // App Store and Google Play links
+                const appStoreID = '6744846435'; // Your Apple App Store ID
+                const playStoreID = 'com.yourdomain.Melodo'; // IMPORTANT: Replace with your Google Play ID
+
+                const appStoreURL = `https://apps.apple.com/app/id${appStoreID}`;
+                const playStoreURL = `https://play.google.com/store/apps/details?id=${playStoreID}`;
+
+                // Attempt to open the app
+                window.location.replace(appURL);
+
+                // Fallback to App Store or Play Store if the app isn't installed
+                // This timeout allows the browser to attempt opening the app before redirecting.
+                setTimeout(() => {
+                    if (navigator.userAgent.toLowerCase().indexOf("iphone") > -1 || navigator.userAgent.toLowerCase().indexOf("ipad") > -1) {
+                        window.location.replace(appStoreURL);
+                    } else if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
+                        window.location.replace(playStoreURL);
+                    } else {
+                        // Fallback for desktop or other OS - you might want to show links instead of auto-redirecting
+                        // For now, just showing the promotional page if it's not handled.
+                        // Or, you could redirect to a generic landing page with both store links.
+                        console.log("Could not determine OS for store redirect. Showing promotional page.");
+                    }
+                }, 1000); // 1 second delay
+            }
+            // If no id and type params, the script does nothing and the promotional page loads normally.
+        })();
+    </script>
 </body>
 </html>
