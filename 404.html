@@ -1,87 +1,7 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Opening Melodo App</title>
-    <!-- For iOS devices - Smart App Banner -->
-    <meta name="apple-itunes-app" content="app-id=6744846435">
-    <!-- For Android devices - Web App Manifest -->
-    <link rel="manifest" href="/manifest.json">
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #0E0D09;
-            color: #F0E6D6;
-            text-align: center;
-            padding: 20px;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .logo {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 24px;
-        }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 16px;
-        }
-        p {
-            font-size: 16px;
-            margin-bottom: 24px;
-            max-width: 500px;
-        }
-        .loading {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(208, 168, 90, 0.3);
-            border-radius: 50%;
-            border-top-color: #D4A85A;
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 24px;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .button {
-            background-color: #D4A85A;
-            color: #0E0D09;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 24px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin: 10px;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .button-secondary {
-            background-color: transparent;
-            color: #D4A85A;
-            border: 2px solid #D4A85A;
-        }
-        .buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .hidden {
-            display: none;
-        }
-        @media (min-width: 480px) {
-            .buttons {
-                flex-direction: row;
-            }
-        }
-    </style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Redirecting to Melodo...</title>
@@ -169,16 +89,6 @@
   </style>
 </head>
 <body>
-    <!-- Replace with your actual logo -->
-    <img src="logo.png" alt="Melodo Logo" class="logo">
-    <h1>Opening Melodo</h1>
-    <p>We're trying to open the Melodo app. If nothing happens, use one of the options below.</p>
-    <div class="loading" id="loading"></div>
-    
-    <div class="buttons hidden" id="buttons">
-        <a href="#" id="appStoreButton" class="button">Get the App</a>
-        <a href="#" id="openAppButton" class="button button-secondary">Try Again</a>
-    </div>
   <img src="/logo.png" alt="Melodo" class="logo">
   <h1>Opening Melodo</h1>
   <p>Please wait while we redirect you...</p>
@@ -204,72 +114,6 @@
       appId: "1:959786272120:ios:95e962f08ce572dd03f48d",
     };
 
-    <script>
-        // Parse URL path and query parameters
-        const path = window.location.pathname;
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        // Set up direct URL scheme
-        let directUrl;
-        
-        // Check for legacy links format (/link?id=X&type=Y)
-        if (path === "/link") {
-            const id = urlParams.get('id');
-            const type = urlParams.get('type');
-            const albumId = urlParams.get('albumId');
-            const userId = urlParams.get('userId');
-            
-            if (type === 'user' && id) {
-                directUrl = `melodo://user/${id}`;
-            } else if (type === 'review' && id) {
-                directUrl = `melodo://review/${id}?albumId=${albumId || ''}&userId=${userId || ''}`;
-            } else {
-                directUrl = 'melodo://';
-            }
-        }
-        // Check for user profile path: /u/userId
-        else if (userMatch = path.match(/^\/u\/([^\/]+)/)) {
-            directUrl = `melodo://user/${userMatch[1]}`;
-        }
-        // Check for review path: /r/reviewId
-        else if (reviewMatch = path.match(/^\/r\/([^\/]+)/)) {
-            // Get the review ID from the path
-            const reviewId = reviewMatch[1];
-            
-            // Build the deeplink URL
-            directUrl = `melodo://review/${reviewId}`;
-            
-            // Add query parameters if present
-            const albumId = urlParams.get('a'); // Short param name for albumId
-            const userId = urlParams.get('u');  // Short param name for userId
-            
-            if (albumId || userId) {
-                directUrl += '?';
-                if (albumId) directUrl += `albumId=${albumId}`;
-                if (albumId && userId) directUrl += '&';
-                if (userId) directUrl += `userId=${userId}`;
-            }
-        }
-        // Check for collection path: /c/collectionId
-        else if (collectionMatch = path.match(/^\/c\/([^\/]+)/)) {
-            // Get the collection ID from the path
-            const collectionId = collectionMatch[1];
-            
-            // Build the deeplink URL for collections
-            directUrl = `melodo://collection/${collectionId}`;
-        }
-        // Check for vinyl collection path: /v/userId
-        else if (vinylMatch = path.match(/^\/v\/([^\/]+)/)) {
-            // Get the user ID from the path
-            const userId = vinylMatch[1];
-            
-            // Build the deeplink URL for vinyl collections
-            directUrl = `melodo://vinyl/${userId}`;
-        }
-        // Default case for homepage or unrecognized paths
-        else {
-            directUrl = 'melodo://';
-        }
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     
@@ -283,11 +127,7 @@
         document.getElementById('loading').style.display = 'flex';
         document.getElementById('buttons').style.display = 'none';
         document.getElementById('loadingText').textContent = `Looking up ${type}...`;
-
-        // Set up App Store URLs
-        let appStoreUrl;
-        if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-            appStoreUrl = 'https://apps.apple.com/app/id6744846435';
+        
         // Query the shortLinks collection
         const snapshot = await db.collection('shortLinks')
           .where('type', '==', type)
@@ -299,48 +139,6 @@
           // Not found, use the short code as the ID (fallback)
           redirectToApp(type, shortCode);
         } else {
-            appStoreUrl = 'https://play.google.com/store/apps/details?id=com.yourdomain.Melodo';
-        }
-        
-        // Set button links
-        document.getElementById('appStoreButton').href = appStoreUrl;
-        document.getElementById('openAppButton').href = directUrl;
-        
-        // Try to open the app
-        let openAttempted = false;
-        
-        // Function to show buttons if app doesn't open
-        function showButtons() {
-            if (!openAttempted) return;
-            
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('buttons').classList.remove('hidden');
-        }
-        
-        // Try to open the app immediately
-        function tryOpenApp() {
-            openAttempted = true;
-            
-            // Try to open the app with the direct URL
-            window.location.href = directUrl;
-            
-            // Show buttons after delay (app didn't open)
-            setTimeout(showButtons, 2500);
-        }
-        
-        // Execute when page loads
-        window.onload = tryOpenApp;
-        
-        // Add analytics event (if you have analytics)
-        if (window.gtag) {
-            gtag('event', 'deep_link_opened', {
-                'event_category': 'Engagement',
-                'event_label': 'Deep Link',
-                'path': path,
-                'directUrl': directUrl
-            });
-        }
-    </script>
           // Use the original ID
           const originalId = snapshot.docs[0].data().originalId;
           console.log('Found original ID:', originalId);
