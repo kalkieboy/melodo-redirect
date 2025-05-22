@@ -6,21 +6,16 @@
     <title>Melodo - Discover, Review, and Share Your World of Music</title>
     <meta name="description" content="Melodo is your ultimate companion for music discovery. Catalog your vinyl, review albums, share your daily soundtrack, and connect with fellow music lovers.">
     
-    <!-- Favicons and Manifest -->
     <link rel="icon" href="logo.png" type="image/png">
     <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="manifest" href="manifest.json">
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome for Icons (Example) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        /* --- Global Styles & Colors --- */
         :root {
             --primary-color: #D4A85A;
             --primary-light: #E3C386;
@@ -31,7 +26,7 @@
             --text-primary-color: #F0E6D6;
             --text-secondary-color: #9D9283;
             --text-tertiary-color: #6D6356;
-            --accent-color: #B85F38; /* From HomeScreen.js */
+            --accent-color: #B85F38;
             --font-heading: 'Roboto Mono', monospace;
             --font-body: 'Lato', sans-serif;
         }
@@ -39,17 +34,78 @@
         body {
             margin: 0;
             font-family: var(--font-body);
-            background-color: var(--background-color);
+            background-color: var(--background-color); /* Fallback */
             color: var(--text-primary-color);
             line-height: 1.6;
             overflow-x: hidden;
+            position: relative; /* For stacking context */
         }
 
+        /* --- Slideshow Background --- */
+        #slideshow-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* Behind overlay and content */
+            overflow: hidden;
+        }
+        #slideshow-background img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out; /* Control fade duration */
+        }
+        #slideshow-background img.active {
+            opacity: 1;
+        }
+
+        /* Overlay for readability */
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(14, 13, 9, 0.7), var(--background-color) 70%, var(--background-color));
+            z-index: -1; /* Between background image and content */
+        }
+        
+        /* Album credit for slideshow */
+        #slideshow-credit {
+            position: fixed;
+            bottom: 15px; /* Position at the bottom */
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-tertiary-color);
+            font-size: 0.8em;
+            font-style: italic;
+            background-color: rgba(14, 13, 9, 0.6);
+            padding: 5px 10px;
+            border-radius: 4px;
+            z-index: 1; /* Above background, below main interactive elements if needed */
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        #slideshow-credit.visible {
+            opacity: 1;
+        }
+
+
+        /* --- Content Styles --- */
         .container {
             width: 90%;
             max-width: 1100px;
             margin: 0 auto;
             padding: 20px 0;
+            position: relative; /* To ensure content is above background overlay */
+            z-index: 1;
         }
 
         h1, h2, h3 {
@@ -108,39 +164,26 @@
             color: var(--background-color);
         }
 
-        /* --- Header / Navbar --- */
         header {
-            background-color: var(--elevated-color);
+            background-color: rgba(30, 27, 23, 0.7); /* Elevated with some transparency */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             padding: 15px 0;
             border-bottom: 1px solid var(--text-tertiary-color);
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 1000; /* Header above everything */
         }
         header .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .logo img {
-            height: 40px; /* Adjust as needed */
-        }
-        nav a {
-            margin-left: 20px;
-            font-family: var(--font-heading);
-            font-size: 0.9rem;
-        }
-        .app-store-badges-nav img {
-            height: 35px;
-            margin-left: 10px;
-        }
+        .logo img { height: 40px; }
+        nav a { margin-left: 20px; font-family: var(--font-heading); font-size: 0.9rem; }
+        .app-store-badges-nav img { height: 35px; margin-left: 10px; }
 
-
-        /* --- Hero Section --- */
         .hero {
-            background: linear-gradient(rgba(14, 13, 9, 0.8), rgba(14, 13, 9, 0.9)), url('YOUR_APP_BACKGROUND_IMAGE.jpg') no-repeat center center/cover; /* Replace with a cool background image */
-            /* Fallback background if image is not set */
-            background-color: var(--card-bg-color);
             padding: 80px 0;
             text-align: center;
             min-height: 70vh;
@@ -152,78 +195,47 @@
         .hero h1 {
             font-size: 3.5rem;
             color: var(--text-primary-color);
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
         }
         .hero p {
             font-size: 1.3rem;
             max-width: 700px;
             margin: 20px auto 30px;
             color: var(--text-secondary-color);
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
         }
         .hero .app-mockup {
             margin-top: 40px;
-            max-width: 80%; /* Adjust as needed */
-            /* Placeholder styling for mockup */
-            background: var(--elevated-color);
+            max-width: 80%;
+            background: rgba(30, 27, 23, 0.6); /* Elevated card with transparency */
             padding: 20px;
             border-radius: 12px;
             border: 1px solid var(--primary-color);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .hero .app-mockup img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-        .app-store-badges img {
-            height: 50px; /* Adjust size as needed */
-            margin: 0 10px;
-            transition: transform 0.2s ease;
-        }
-        .app-store-badges img:hover {
-            transform: scale(1.05);
-        }
+        .hero .app-mockup img { max-width: 100%; height: auto; border-radius: 8px; }
+        .app-store-badges img { height: 50px; margin: 0 10px; transition: transform 0.2s ease; }
+        .app-store-badges img:hover { transform: scale(1.05); }
 
-        /* --- Features Section --- */
-        .features {
-            padding: 60px 0;
-            background-color: var(--background-color);
-        }
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
+        .features { padding: 60px 0; /* No background needed, slideshow is there */ }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
         .feature-item {
-            background-color: var(--card-bg-color);
+            background-color: rgba(22, 20, 18, 0.8); /* cardBg with transparency */
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
             padding: 30px;
             border-radius: 12px;
             border: 1px solid var(--text-tertiary-color);
             text-align: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .feature-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(212, 168, 90, 0.1);
-        }
-        .feature-item i { /* Font Awesome icon style */
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-        }
-        .feature-item h3 {
-            margin-top: 0;
-        }
+        .feature-item:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(212, 168, 90, 0.15); }
+        .feature-item i { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 20px; }
+        .feature-item h3 { margin-top: 0; }
 
-        /* --- Showcase Section --- */
-        .showcase-section {
-            padding: 60px 0;
-            background-color: var(--elevated-color);
-            text-align: center;
-        }
+        .showcase-section { padding: 60px 0; text-align: center; }
         .showcase-section .app-mockup {
-            /* Placeholder styling for mockup */
-            background: var(--card-bg-color);
+            background: rgba(22, 20, 18, 0.7); /* cardBg with transparency */
             padding: 20px;
             border-radius: 12px;
             border: 1px solid var(--primary-color);
@@ -231,46 +243,26 @@
             max-width: 700px;
             margin: 30px auto;
         }
-         .showcase-section .app-mockup img {
-            max-width: 100%;
-            border-radius: 8px;
-        }
+        .showcase-section .app-mockup img { max-width: 100%; border-radius: 8px; }
 
-        /* --- CTA Section --- */
-        .cta-section {
-            padding: 80px 0;
-            background-color: var(--card-bg-color); /* Or primary color for strong CTA */
-            text-align: center;
-        }
-        .cta-section h2 {
-            color: var(--primary-light);
-        }
-        .cta-section p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-        }
+        .cta-section { padding: 80px 0; text-align: center; }
+        .cta-section h2 { color: var(--primary-light); }
+        .cta-section p { font-size: 1.2rem; margin-bottom: 30px; }
 
-        /* --- Footer --- */
         footer {
-            background-color: var(--elevated-color);
+            background-color: rgba(30, 27, 23, 0.8); /* Elevated with transparency */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             color: var(--text-secondary-color);
             text-align: center;
             padding: 30px 0;
             border-top: 1px solid var(--text-tertiary-color);
             font-size: 0.9rem;
         }
-        footer p {
-            margin: 5px 0;
-            color: var(--text-tertiary-color);
-        }
-        footer a {
-            color: var(--text-secondary-color);
-        }
-        footer a:hover {
-            color: var(--primary-light);
-        }
+        footer p { margin: 5px 0; color: var(--text-tertiary-color); }
+        footer a { color: var(--text-secondary-color); }
+        footer a:hover { color: var(--primary-light); }
 
-        /* Responsive adjustments */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
             .hero p { font-size: 1.1rem; }
@@ -279,10 +271,17 @@
             nav a { margin: 0 10px; }
             .app-store-badges-nav { margin-top:10px; }
         }
-
     </style>
 </head>
 <body>
+
+    <!-- Slideshow Background -->
+    <div id="slideshow-background">
+        <!-- Images will be added here by JavaScript -->
+    </div>
+    <div class="background-overlay"></div>
+    <div id="slideshow-credit"></div>
+
 
     <!-- Header -->
     <header>
@@ -291,13 +290,11 @@
             <nav>
                 <a href="#features">Features</a>
                 <a href="#showcase">Showcase</a>
-                <!-- <a href="#">Blog</a> -->
                 <span class="app-store-badges-nav">
                     <a href="https://apps.apple.com/app/id6744846435" target="_blank" aria-label="Download on the App Store">
                         <img src="https://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg" alt="App Store Badge">
                     </a>
                     <a href="https://play.google.com/store/apps/details?id=com.yourdomain.Melodo" target="_blank" aria-label="Get it on Google Play">
-                        <!-- Find a Google Play badge SVG or use a text link -->
                         <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Google Play Badge" style="height: 52px; margin-top: -8px;">
                     </a>
                 </span>
@@ -315,20 +312,17 @@
                     <img src="https://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg" alt="Download on the App Store">
                 </a>
                 <a href="https://play.google.com/store/apps/details?id=com.yourdomain.Melodo" target="_blank" aria-label="Get it on Google Play">
-                    <!-- IMPORTANT: Replace com.yourdomain.Melodo with your actual Google Play ID -->
-                    <!-- You can find official Google Play badges here: https://play.google.com/intl/en_us/badges/ -->
                     <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play">
                 </a>
             </div>
             <div class="app-mockup">
-                <!-- Ideally, replace this with an actual screenshot or mockup of your app -->
                 <img src="YOUR_APP_MOCKUP_HERO.png" alt="Melodo App Interface Mockup">
                 <p style="font-size:0.9em; margin-top:10px;">(App mockup placeholder - replace with your image)</p>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- Features Section (content as before) -->
     <section id="features" class="features">
         <div class="container">
             <h2>Experience Melodo</h2>
@@ -349,7 +343,7 @@
                     <p>What's your vibe today? Pick and share your daily song, and see what your friends are listening to.</p>
                 </div>
                 <div class="feature-item">
-                    <i class="fas fa-record-vinyl"></i> <!-- Or fas fa-layer-group -->
+                    <i class="fas fa-record-vinyl"></i>
                     <h3>Curate Showcases</h3>
                     <p>Create themed collections of albums – your all-time favorites, desert island discs, or genre explorations.</p>
                 </div>
@@ -367,20 +361,19 @@
         </div>
     </section>
 
-    <!-- Showcase Section -->
-    <section id="showcase" class="showcase-section">
+    <!-- Showcase Section (content as before) -->
+     <section id="showcase" class="showcase-section">
         <div class="container">
             <h2>Styled for Audiophiles</h2>
             <p>Immerse yourself in a beautifully designed interface that celebrates music culture.</p>
             <div class="app-mockup">
-                 <!-- Ideally, replace this with another actual screenshot or mockup of your app -->
                 <img src="YOUR_APP_MOCKUP_SHOWCASE.png" alt="Melodo App Feature Showcase">
                 <p style="font-size:0.9em; margin-top:10px;">(App mockup placeholder - replace with your image)</p>
             </div>
         </div>
     </section>
 
-    <!-- Call to Action Section -->
+    <!-- CTA Section (content as before) -->
     <section class="cta-section">
         <div class="container">
             <h2>Ready to Tune In?</h2>
@@ -396,59 +389,133 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Footer (content as before) -->
     <footer>
         <div class="container">
             <p>© <span id="currentYear"></span> Melodo. All rights reserved.</p>
-            <p>
-                <a href="privacy.html">Privacy Policy</a>
-                <!-- Add other links if needed, e.g., Terms of Service, Contact -->
-            </p>
-             <p style="font-size: 0.8em; color: var(--text-tertiary-color);">Designed with passion for music.</p>
+            <p><a href="privacy.html">Privacy Policy</a></p>
+            <p style="font-size: 0.8em; color: var(--text-tertiary-color);">Designed with passion for music.</p>
         </div>
     </footer>
 
     <script>
-        // Set current year in footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // --- Slideshow Logic ---
+        const albumCovers = [
+            // IMPORTANT: Replace these with your actual high-resolution album cover URLs and metadata
+            // Use direct links to images (e.g., from a CDN, Imgur, or your own hosting)
+            // Spotify album cover URLs from their API often expire.
+            { 
+                url: 'https://i.scdn.co/image/ab67616d0000b273e319baafd16e012461058a00', // Example: Arctic Monkeys - AM
+                name: 'AM',
+                artist: 'Arctic Monkeys' 
+            },
+            { 
+                url: 'https://i.scdn.co/image/ab67616d0000b273f7f74100d5fcp2a150f9fde2f', // Example: Tame Impala - Currents
+                name: 'Currents',
+                artist: 'Tame Impala'
+            },
+            { 
+                url: 'https://i.scdn.co/image/ab67616d0000b273b2b2b2a29d13e1e1a09977f4', // Example: Kendrick Lamar - To Pimp A Butterfly
+                name: 'To Pimp A Butterfly',
+                artist: 'Kendrick Lamar'
+            },
+            {
+                url: 'https://i.scdn.co/image/ab67616d0000b27323853588a07670c899300999', // Example: Fleetwood Mac - Rumours
+                name: 'Rumours',
+                artist: 'Fleetwood Mac'
+            },
+            {
+                url: 'https://i.scdn.co/image/ab67616d0000b2736e86d859d1a31410a9a7d36e', // Example: Pink Floyd - Dark Side of the Moon
+                name: 'The Dark Side of the Moon',
+                artist: 'Pink Floyd'
+            }
+            // Add more album objects here
+        ];
+
+        const slideshowContainer = document.getElementById('slideshow-background');
+        const creditElement = document.getElementById('slideshow-credit');
+        let currentImageIndex = -1;
+        let imageElements = [];
+
+        function preloadImages() {
+            albumCovers.forEach((album, index) => {
+                const img = new Image();
+                img.src = album.url; // Preload
+                const imgElement = document.createElement('img');
+                imgElement.src = album.url;
+                imgElement.alt = `Album art for ${album.name} by ${album.artist}`;
+                slideshowContainer.appendChild(imgElement);
+                imageElements.push(imgElement);
+            });
+        }
+
+        function changeImage() {
+            if (imageElements.length === 0) return;
+
+            // Fade out current credit
+            creditElement.classList.remove('visible');
+
+            // Fade out current image
+            if (currentImageIndex >= 0 && imageElements[currentImageIndex]) {
+                imageElements[currentImageIndex].classList.remove('active');
+            }
+
+            currentImageIndex = (currentImageIndex + 1) % imageElements.length;
+            
+            const currentAlbum = albumCovers[currentImageIndex];
+
+            // After a short delay (for fade out to progress), fade in new image and credit
+            setTimeout(() => {
+                if (imageElements[currentImageIndex]) {
+                    imageElements[currentImageIndex].classList.add('active');
+                }
+                if (creditElement && currentAlbum) {
+                    creditElement.textContent = `Now viewing: ${currentAlbum.name} by ${currentAlbum.artist}`;
+                    creditElement.classList.add('visible');
+                }
+            }, 750); // Half of the CSS transition duration for opacity
+
+        }
+        
+        if (albumCovers.length > 0) {
+            preloadImages();
+            changeImage(); // Initial image
+            setInterval(changeImage, 7000); // Change image every 7 seconds
+        }
+
 
         // --- Legacy Deep Link Handling (for ?id=...&type=... links) ---
         (function() {
+            console.log("index.html script loaded. Current URL:", window.location.href);
             const params = new URLSearchParams(window.location.search);
             const id = params.get('id');
-            const type = params.get('type'); // e.g., 'user', 'review'
+            const type = params.get('type');
 
             if (id && type) {
-                // App's URL scheme
-                // Make sure this matches your app's actual scheme
+                console.log(`index.html: Legacy deep link detected - ID: ${id}, Type: ${type}. Attempting redirect.`);
                 const appURL = `melodo://${type}/${id}`; 
-                
-                // App Store and Google Play links
-                const appStoreID = '6744846435'; // Your Apple App Store ID
-                const playStoreID = 'com.yourdomain.Melodo'; // IMPORTANT: Replace with your Google Play ID
+                const appStoreID = '6744846435'; 
+                const playStoreID = 'com.yourdomain.Melodo'; // IMPORTANT: Replace
 
                 const appStoreURL = `https://apps.apple.com/app/id${appStoreID}`;
                 const playStoreURL = `https://play.google.com/store/apps/details?id=${playStoreID}`;
 
-                // Attempt to open the app
                 window.location.replace(appURL);
 
-                // Fallback to App Store or Play Store if the app isn't installed
-                // This timeout allows the browser to attempt opening the app before redirecting.
                 setTimeout(() => {
                     if (navigator.userAgent.toLowerCase().indexOf("iphone") > -1 || navigator.userAgent.toLowerCase().indexOf("ipad") > -1) {
                         window.location.replace(appStoreURL);
                     } else if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
                         window.location.replace(playStoreURL);
                     } else {
-                        // Fallback for desktop or other OS - you might want to show links instead of auto-redirecting
-                        // For now, just showing the promotional page if it's not handled.
-                        // Or, you could redirect to a generic landing page with both store links.
-                        console.log("Could not determine OS for store redirect. Showing promotional page.");
+                        console.log("index.html: Could not determine OS for store redirect on legacy link.");
                     }
-                }, 1000); // 1 second delay
+                }, 1000);
+            } else {
+                console.log("index.html: No legacy deep link params. Displaying promotional page.");
             }
-            // If no id and type params, the script does nothing and the promotional page loads normally.
         })();
     </script>
 </body>
