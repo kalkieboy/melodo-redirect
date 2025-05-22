@@ -3,115 +3,401 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Opening Melodo...</title>
+    <title>Opening Melodo App</title>
+    <!-- For iOS devices - Smart App Banner -->
+    <meta name="apple-itunes-app" content="app-id=6744846435">
+    <!-- For Android devices - Web App Manifest -->
+    <link rel="manifest" href="/manifest.json">
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #0E0D09; /* Melodo Background */
-            color: #F0E6D6; /* Melodo Text Primary */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0E0D09;
+            color: #F0E6D6;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-            padding: 20px;
+            min-height: 100vh;
         }
-        .loader {
-            border: 5px solid #1E1B17; /* Melodo Elevated */
-            border-top: 5px solid #D4A85A; /* Melodo Primary */
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 24px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        p {
+            font-size: 16px;
+            margin-bottom: 24px;
+            max-width: 500px;
+        }
+        .loading {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(208, 168, 90, 0.3);
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            border-top-color: #D4A85A;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 24px;
         }
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
         }
-        p { color: #9D9283; /* Melodo Text Secondary */ }
-        a { color: #D4A85A; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        .store-links { margin-top: 30px; }
-        .store-links img { height: 45px; margin: 0 10px; }
+        .button {
+            background-color: #D4A85A;
+            color: #0E0D09;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .button-secondary {
+            background-color: transparent;
+            color: #D4A85A;
+            border: 2px solid #D4A85A;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        @media (min-width: 480px) {
+            .buttons {
+                flex-direction: row;
+            }
+        }
     </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting to Melodo...</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #0E0D09;
+      color: #F0E6D6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 16px;
+      text-align: center;
+    }
+    
+    .logo {
+      width: 140px;
+      height: 140px;
+      margin-bottom: 20px;
+      border-radius: 20px;
+    }
+    
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    
+    p {
+      font-size: 16px;
+      color: #9D9283;
+      margin-bottom: 40px;
+    }
+    
+    #loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(212, 168, 90, 0.3);
+      border-radius: 50%;
+      border-top-color: #D4A85A;
+      animation: spin 1s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    #buttons {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 300px;
+    }
+    
+    .button {
+      display: block;
+      width: 100%;
+      padding: 14px 0;
+      background-color: #D4A85A;
+      color: #0E0D09;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 30px;
+      text-align: center;
+    }
+    
+    .button.secondary {
+      background-color: transparent;
+      border: 1px solid #D4A85A;
+      color: #D4A85A;
+    }
+  </style>
 </head>
 <body>
-    <div class="loader"></div>
-    <h1>Taking you to Melodo...</h1>
-    <p>If the app doesn't open automatically, please use the links below.</p>
-    <div class="store-links">
-        <a id="appStoreLink" href="#"><img src="https://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg" alt="Download on the App Store"></a>
-        <a id="playStoreLink" href="#"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play"></a>
+    <!-- Replace with your actual logo -->
+    <img src="logo.png" alt="Melodo Logo" class="logo">
+    <h1>Opening Melodo</h1>
+    <p>We're trying to open the Melodo app. If nothing happens, use one of the options below.</p>
+    <div class="loading" id="loading"></div>
+    
+    <div class="buttons hidden" id="buttons">
+        <a href="#" id="appStoreButton" class="button">Get the App</a>
+        <a href="#" id="openAppButton" class="button button-secondary">Try Again</a>
     </div>
-    <p style="margin-top: 30px;"><a href="/">Go to Melodo Homepage</a></p>
+  <img src="/logo.png" alt="Melodo" class="logo">
+  <h1>Opening Melodo</h1>
+  <p>Please wait while we redirect you...</p>
+  
+  <div id="loading">
+    <div class="spinner"></div>
+    <p id="loadingText">Looking up content...</p>
+  </div>
+  
+  <div id="buttons">
+    <a href="#" id="openAppButton" class="button">Open in Melodo App</a>
+    <a href="https://apps.apple.com/app/id6744846435" class="button secondary">Get the Melodo App</a>
+  </div>
+  
+  <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyB6RI7el3fzsUWzQXtFVbRJhKbanBx-bnk",
+      authDomain: "album-review-app-34acc.firebaseapp.com",
+      projectId: "album-review-app-34acc",
+      storageBucket: "album-review-app-34acc.firebasestorage.app",
+      messagingSenderId: "959786272120",
+      appId: "1:959786272120:ios:95e962f08ce572dd03f48d",
+    };
 
     <script>
-        (function() {
-            const path = window.location.pathname; // e.g., /u/userId, /r/reviewId
-            const parts = path.split('/').filter(Boolean); // e.g., ['u', 'userId']
-
-            let appPath = '';
-            let type = '';
-            let id = '';
-
-            if (parts.length === 2) {
-                type = parts[0]; // 'u', 'r', 'c', 'v'
-                id = parts[1];
-
-                // Map web paths to app's internal deep link paths if they differ
-                // Assuming they are the same structure for now:
-                // melodo://user/xxxx, melodo://review/xxxx, etc.
-                switch(type) {
-                    case 'u': appPath = `user/${id}`; break;
-                    case 'r': appPath = `review/${id}`; break;
-                    case 'c': appPath = `collection/${id}`; break;
-                    case 'v': appPath = `vinyl/${id}`; break; // Or `user/${id}/vinyl` if that's the structure
-                    default:
-                        // Unknown path type, redirect to homepage
-                        window.location.replace('/');
-                        return;
-                }
-            } else {
-                // Path doesn't match expected deep link structure, redirect to homepage
-                window.location.replace('/');
-                return;
-            }
-
-            const appURL = `melodo://${appPath}`; // Your app's URL scheme
-
-            const appStoreID = '6744846435'; 
-            const playStoreID = 'com.yourdomain.Melodo'; // IMPORTANT: Replace!
-
-            const appStoreURL = `https://apps.apple.com/app/id${appStoreID}`;
-            const playStoreURL = `https://play.google.com/store/apps/details?id=${playStoreID}`;
-
-            // Update store links on the page
-            document.getElementById('appStoreLink').href = appStoreURL;
-            document.getElementById('playStoreLink').href = playStoreURL;
+        // Parse URL path and query parameters
+        const path = window.location.pathname;
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Set up direct URL scheme
+        let directUrl;
+        
+        // Check for legacy links format (/link?id=X&type=Y)
+        if (path === "/link") {
+            const id = urlParams.get('id');
+            const type = urlParams.get('type');
+            const albumId = urlParams.get('albumId');
+            const userId = urlParams.get('userId');
             
-            // Attempt to open the app
-            window.location.replace(appURL);
+            if (type === 'user' && id) {
+                directUrl = `melodo://user/${id}`;
+            } else if (type === 'review' && id) {
+                directUrl = `melodo://review/${id}?albumId=${albumId || ''}&userId=${userId || ''}`;
+            } else {
+                directUrl = 'melodo://';
+            }
+        }
+        // Check for user profile path: /u/userId
+        else if (userMatch = path.match(/^\/u\/([^\/]+)/)) {
+            directUrl = `melodo://user/${userMatch[1]}`;
+        }
+        // Check for review path: /r/reviewId
+        else if (reviewMatch = path.match(/^\/r\/([^\/]+)/)) {
+            // Get the review ID from the path
+            const reviewId = reviewMatch[1];
+            
+            // Build the deeplink URL
+            directUrl = `melodo://review/${reviewId}`;
+            
+            // Add query parameters if present
+            const albumId = urlParams.get('a'); // Short param name for albumId
+            const userId = urlParams.get('u');  // Short param name for userId
+            
+            if (albumId || userId) {
+                directUrl += '?';
+                if (albumId) directUrl += `albumId=${albumId}`;
+                if (albumId && userId) directUrl += '&';
+                if (userId) directUrl += `userId=${userId}`;
+            }
+        }
+        // Check for collection path: /c/collectionId
+        else if (collectionMatch = path.match(/^\/c\/([^\/]+)/)) {
+            // Get the collection ID from the path
+            const collectionId = collectionMatch[1];
+            
+            // Build the deeplink URL for collections
+            directUrl = `melodo://collection/${collectionId}`;
+        }
+        // Check for vinyl collection path: /v/userId
+        else if (vinylMatch = path.match(/^\/v\/([^\/]+)/)) {
+            // Get the user ID from the path
+            const userId = vinylMatch[1];
+            
+            // Build the deeplink URL for vinyl collections
+            directUrl = `melodo://vinyl/${userId}`;
+        }
+        // Default case for homepage or unrecognized paths
+        else {
+            directUrl = 'melodo://';
+        }
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    
+    // Parse URL path
+    const path = window.location.pathname;
+    
+    // Helper to look up short code and redirect
+    async function lookupAndRedirect(type, shortCode) {
+      try {
+        // Show loading state
+        document.getElementById('loading').style.display = 'flex';
+        document.getElementById('buttons').style.display = 'none';
+        document.getElementById('loadingText').textContent = `Looking up ${type}...`;
 
-            // Fallback to App Store or Play Store
-            const timeout = setTimeout(() => {
-                if (document.hidden || document.webkitHidden) { // Heuristic: if page is hidden, app likely opened
-                    clearTimeout(timeout);
-                    return;
-                }
-                // If app didn't open, redirect to the appropriate store
-                if (navigator.userAgent.toLowerCase().indexOf("iphone") > -1 || navigator.userAgent.toLowerCase().indexOf("ipad") > -1) {
-                    window.location.replace(appStoreURL);
-                } else if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
-                    window.location.replace(playStoreURL);
-                } else {
-                    // For desktop, the page with store links will remain visible.
-                    console.log("Desktop or unknown OS. Store links are available on the page.");
-                }
-            }, 2500); // Increased timeout for better reliability
-        })();
+        // Set up App Store URLs
+        let appStoreUrl;
+        if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+            appStoreUrl = 'https://apps.apple.com/app/id6744846435';
+        // Query the shortLinks collection
+        const snapshot = await db.collection('shortLinks')
+          .where('type', '==', type)
+          .where('shortCode', '==', shortCode)
+          .get();
+          
+        if (snapshot.empty) {
+          console.log('No matching document found for', type, shortCode);
+          // Not found, use the short code as the ID (fallback)
+          redirectToApp(type, shortCode);
+        } else {
+            appStoreUrl = 'https://play.google.com/store/apps/details?id=com.yourdomain.Melodo';
+        }
+        
+        // Set button links
+        document.getElementById('appStoreButton').href = appStoreUrl;
+        document.getElementById('openAppButton').href = directUrl;
+        
+        // Try to open the app
+        let openAttempted = false;
+        
+        // Function to show buttons if app doesn't open
+        function showButtons() {
+            if (!openAttempted) return;
+            
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('buttons').classList.remove('hidden');
+        }
+        
+        // Try to open the app immediately
+        function tryOpenApp() {
+            openAttempted = true;
+            
+            // Try to open the app with the direct URL
+            window.location.href = directUrl;
+            
+            // Show buttons after delay (app didn't open)
+            setTimeout(showButtons, 2500);
+        }
+        
+        // Execute when page loads
+        window.onload = tryOpenApp;
+        
+        // Add analytics event (if you have analytics)
+        if (window.gtag) {
+            gtag('event', 'deep_link_opened', {
+                'event_category': 'Engagement',
+                'event_label': 'Deep Link',
+                'path': path,
+                'directUrl': directUrl
+            });
+        }
     </script>
+          // Use the original ID
+          const originalId = snapshot.docs[0].data().originalId;
+          console.log('Found original ID:', originalId);
+          redirectToApp(type, originalId);
+        }
+      } catch (error) {
+        console.error('Error looking up short code:', error);
+        // Error fallback: try using the short code directly
+        redirectToApp(type, shortCode);
+      }
+    }
+    
+    function redirectToApp(type, id) {
+      let directUrl = 'melodo://';
+      let appStorePage = 'https://apps.apple.com/app/id6744846435';
+      
+      if (type === 'user') {
+        directUrl = `melodo://user/${id}`;
+      } else if (type === 'review') {
+        directUrl = `melodo://review/${id}`;
+      } else if (type === 'vinyl') {
+        directUrl = `melodo://vinyl/${id}`;
+      } else if (type === 'collection') {
+        directUrl = `melodo://collection/${id}`;
+      }
+      
+      // Set buttons and redirect
+      document.getElementById('openAppButton').href = directUrl;
+      
+      // Attempt to redirect
+      window.location.href = directUrl;
+      
+      // Show buttons after delay (in case the redirect fails)
+      setTimeout(() => {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('buttons').style.display = 'flex';
+      }, 2500);
+    }
+    
+    // Handle URL patterns and lookup IDs
+    const userMatch = path.match(/^\/u\/([^\/]+)/);
+    const reviewMatch = path.match(/^\/r\/([^\/]+)/);
+    const vinylMatch = path.match(/^\/v\/([^\/]+)/);
+    const collectionMatch = path.match(/^\/c\/([^\/]+)/);
+    
+    if (userMatch && userMatch[1]) {
+      lookupAndRedirect('user', userMatch[1]);
+    } else if (reviewMatch && reviewMatch[1]) {
+      lookupAndRedirect('review', reviewMatch[1]);
+    } else if (vinylMatch && vinylMatch[1]) {
+      lookupAndRedirect('vinyl', vinylMatch[1]);
+    } else if (collectionMatch && collectionMatch[1]) {
+      lookupAndRedirect('collection', collectionMatch[1]);
+    } else {
+      // Default redirect to app home
+      redirectToApp(null, null);
+    }
+  </script>
 </body>
 </html>
