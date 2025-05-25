@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -151,31 +150,85 @@
       }
     }
     
-    function redirectToApp(type, id) {
-      let directUrl = 'melodo://';
+    function redirectToApp(type, actualId) {
+      // Use the actual resolved ID for custom schemes
+      let customSchemeUrl = '';
+      let universalLinkUrl = '';
       let appStorePage = 'https://apps.apple.com/app/id6744846435';
+      let playStorePage = 'https://play.google.com/store/apps/details?id=com.yourdomain.Melodo';
       
       if (type === 'user') {
-        directUrl = `melodo://user/${id}`;
+        customSchemeUrl = `melodo://user/${actualId}`;
+        universalLinkUrl = `https://melodoapp.com/u/${actualId}`;
       } else if (type === 'review') {
-        directUrl = `melodo://review/${id}`;
+        customSchemeUrl = `melodo://review/${actualId}`;
+        universalLinkUrl = `https://melodoapp.com/r/${actualId}`;
       } else if (type === 'vinyl') {
-        directUrl = `melodo://vinyl/${id}`;
+        customSchemeUrl = `melodo://vinyl/${actualId}`;
+        universalLinkUrl = `https://melodoapp.com/v/${actualId}`;
       } else if (type === 'collection') {
-        directUrl = `melodo://collection/${id}`;
+        customSchemeUrl = `melodo://collection/${actualId}`;
+        universalLinkUrl = `https://melodoapp.com/c/${actualId}`;
       }
       
-      // Set buttons and redirect
-      document.getElementById('openAppButton').href = directUrl;
+      // Try different redirect strategies based on platform
+      const isAndroid = /Android/i.test(navigator.userAgent);
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
       
-      // Attempt to redirect
-      window.location.href = directUrl;
+      console.log('Redirecting:', { type, actualId, customSchemeUrl, universalLinkUrl, isAndroid, isIOS });
       
-      // Show buttons after delay (in case the redirect fails)
-      setTimeout(() => {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('buttons').style.display = 'flex';
-      }, 2500);
+      // Set the manual button for fallback
+      document.getElementById('openAppButton').href = customSchemeUrl;
+      
+      if (isAndroid) {
+        // Android: Try custom scheme first (since we have the actual ID), then intent, then universal link
+        console.log('Trying Android custom scheme first:', customSchemeUrl);
+        window.location.href = customSchemeUrl;
+        
+        // Fallback to intent URL after short delay
+        setTimeout(() => {
+          const intentUrl = `intent://melodoapp.com/${type === 'user' ? 'u' : type === 'review' ? 'r' : type === 'vinyl' ? 'v' : 'c'}/${actualId}#Intent;scheme=https;package=com.yourdomain.Melodo;S.browser_fallback_url=${encodeURIComponent(universalLinkUrl)};end`;
+          console.log('Custom scheme failed, trying intent URL:', intentUrl);
+          window.location.href = intentUrl;
+          
+          setTimeout(() => {
+            console.log('Intent failed, trying universal link:', universalLinkUrl);
+            window.location.href = universalLinkUrl;
+            
+            setTimeout(() => {
+              showFallbackButtons();
+            }, 1000);
+          }, 1000);
+        }, 500);
+        
+      } else if (isIOS) {
+        // iOS: Try custom scheme first, then universal link
+        console.log('Trying iOS custom scheme first:', customSchemeUrl);
+        window.location.href = customSchemeUrl;
+        
+        setTimeout(() => {
+          console.log('Custom scheme failed, trying universal link:', universalLinkUrl);
+          window.location.href = universalLinkUrl;
+          
+          setTimeout(() => {
+            showFallbackButtons();
+          }, 1000);
+        }, 500);
+        
+      } else {
+        // Desktop or other platforms
+        console.log('Desktop/other platform, trying custom scheme');
+        window.location.href = customSchemeUrl;
+        
+        setTimeout(() => {
+          showFallbackButtons();
+        }, 1500);
+      }
+    }
+    
+    function showFallbackButtons() {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('buttons').style.display = 'flex';
     }
     
     // Handle URL patterns and lookup IDs
